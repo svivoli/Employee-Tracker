@@ -16,12 +16,26 @@ var connection = mysql.createConnection({
     database: "employees_db"
 });
 
+const title = `
+.xxxxxx .xxx      .xxx .xxxxxx  .xx      .xxxxx  .xx    xx .xxxxxx .xxxxxx
+.xx     .xxxxx  .xxxxx .xx  .xx .xx     .xx  .xx  .xx  xx  .xx     .xx
+.xxxxxx .xx   .xx  .xx .xx  .xx .xx     .xx  .xx   .xxxx   .xxxxxx .xxxxxx
+.xx     .xx        .xx .xxxxxx  .xx     .xx  .xx    .xx    .xx     .xx
+.xxxxxx .xx        .xx .xx      .xxxxxx  .xxxxx     .xx    .xxxxxx .xxxxxx
+
+.xxxxxxxx .xxxxxx   .xxxxx   .xxxx   .xx  .xx .xxxxxx .xxxxxx
+   .xx    .xx  .xx .xx  .xx .xx  .xx .xx .xx  .xx     .xx   xx
+   .xx    .xx  .xx .xx  .xx .xx      .xxxx    .xxxxxx .xx   xx
+   .xx    .xxxxxx  .xxxxxxx .xx  .xx .xx .xx  .xx     .xxxxxx
+   .xx    .xx  .xx .xx  .xx  .xxxx   .xx  .xx .xxxxxx .xx   xx
+`
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
     queryDepartments();
     queryRoles();
     queryEmployees();
+    console.log(chalk.green(title));
     promptAction();
 });
 
@@ -72,9 +86,9 @@ function promptAction() {
                 "View all roles",
                 "View all employees",
                 "View employees by department",
+                "View employees by manager",
                 "Update a role",
-                "Update an employee",
-                "Update an employee manager",
+                "Update an employee's manager",
                 "View the total utilized budget of a department",
                 "Delete a department",
                 "Delete a role",
@@ -97,8 +111,12 @@ function promptAction() {
                 viewAllEmployees();
             } else if (val.type === "View employees by department") {
                 viewEmplByDept();
+            } else if (val.type === "View employees by manager") {
+                viewEmplByMan();
             } else if (val.type === "Update a role") {
                 updateRole();
+            } else if (val.type === "Update an employee's manager") {
+                updateManager();
             } else if (val.type === "View the total utilized budget of a department") {
                 viewBudget();
             } else if (val.type === "Delete a department") {
@@ -126,17 +144,11 @@ function addDepartment() {
                 },
                 function (err, res) {
                     if (err) throw err;
-                    console.log(res.affectedRows + " Database updated.\n");
-                    promptAction();
+                    viewDepartments();
+                    console.log(chalk.magenta("Database Updated.\n"));
+                    console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
                 })
             departments.push(JSON.stringify(val.name));
-            console.log(departments);
-            // connection.query("SELECT * FROM department WHERE name=?", [val.name], function (err, res) {
-            //     if (err) throw err;
-            //     departments.push(JSON.stringify(res.name));
-            //     console.log(departments);
-            // })
-
         })
 };
 
@@ -161,10 +173,8 @@ function addRole() {
     ])
         .then(val => {
             roles.push(JSON.stringify(val.title));
-            console.log(roles);
             connection.query("SELECT * FROM department WHERE name = ?", [val.department], function (err, res) {
                 if (err) throw err;
-                // console.log(res);
                 connection.query("INSERT INTO role SET ?",
                     {
                         title: val.title,
@@ -173,12 +183,11 @@ function addRole() {
                     },
                     function (err, res) {
                         if (err) throw err;
-                        console.log(res.affectedRows + " Database updated.\n");
-                        promptAction();
+                        viewRoles();
+                        console.log(chalk.magenta("Database Updated.\n"));
+                        console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
                     })
-
             })
-
         })
 };
 
@@ -208,15 +217,13 @@ function addEmployee() {
         }
     ])
         .then(val => {
-            // console.log(val);
+            const manName = val.manager.split(" ");
             connection.query("SELECT * FROM role WHERE title = ?", [val.role], function (err, res) {
-                console.log(res[0].department_id);
                 if (err) throw err;
-                connection.query("SELECT * FROM employee WHERE first_name + last_name = ?", [val.manager], function (err, res2) {
+                connection.query("SELECT * FROM employee WHERE first_name = ? AND last_name = ?", [manName[0], manName[1]], function (err, res2) {
                     if (err) throw err;
                     connection.query("SELECT d.id, d.name, r.department_id FROM department d INNER JOIN role r ON r.department_id=d.id", function (err, res3) {
                         if (err) throw err;
-                        console.log(res3);
                         connection.query("INSERT INTO employee SET ?",
                             {
                                 first_name: val.first,
@@ -231,13 +238,13 @@ function addEmployee() {
                             },
                             function (err, res) {
                                 if (err) throw err;
-                                console.log(res.affectedRows + " Database updated.\n");
-                                promptAction();
+                                viewAllEmployees();
+                                console.log(chalk.magenta("Database Updated.\n"));
+                                console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
                             })
                     })
                 })
                 employees.push(JSON.stringify(val.first + " " + val.last));
-                // console.log(employees);
             })
         })
 };
@@ -246,7 +253,7 @@ function viewAllEmployees() {
     connection.query("SELECT * FROM employee", function (err, res) {
         if (err) throw err;
         console.table(res);
-        promptAction();
+        console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
     })
 }
 
@@ -254,7 +261,7 @@ function viewDepartments() {
     connection.query("SELECT * FROM department", function (err, res) {
         if (err) throw err;
         console.table(res);
-        promptAction();
+        console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
     })
 }
 
@@ -262,7 +269,7 @@ function viewRoles() {
     connection.query("SELECT * FROM role", function (err, res) {
         if (err) throw err;
         console.table(res);
-        promptAction();
+        console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
     })
 };
 
@@ -276,17 +283,31 @@ function viewEmplByDept() {
         }
     ])
         .then(val => {
-            for (i = 0; i < departments.length; i++) {
-                if (val.empldepartment === departments[i]) {
-                    connection.query("SELECT * FROM employee INNER JOIN department ON employee.department=?", [val.empldepartment], function (err, res) {
-                        if (err) throw err;
-                        console.table(res);
-                        promptAction();
-                    })
-                }
-            }
+            connection.query("SELECT * FROM employee WHERE department = ?", [val.empldepartment], function (err, res) {
+                if (err) throw err;
+                console.table(res);
+                console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+            })
         })
 };
+
+function viewEmplByMan() {
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "emplmanager",
+            message: "Which manager would you like to view?",
+            choices: employees
+        }
+    ])
+        .then(val => {
+            connection.query("SELECT * FROM employee WHERE manager = ?", [val.emplmanager], function (err, res) {
+                if (err) throw err;
+                console.table(res);
+                console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+            })
+        })
+}
 
 
 function updateRole() {
@@ -301,7 +322,7 @@ function updateRole() {
         .then(val => {
             connection.query("SELECT * FROM role WHERE title = ?", [val.updaterole], function (err, res) {
                 if (err) throw err;
-                console.log("Current role:")
+                console.log(chalk.cyan("Current role:"))
                 console.table(res);
                 inquirer.prompt([
                     {
@@ -325,13 +346,53 @@ function updateRole() {
                         connection.query("SELECT * FROM department WHERE name = ?", [val2.department], function (err, res2) {
                             if (err) throw err;
                             connection.query("UPDATE role SET title = ?, salary = ?, department_id = ? WHERE title = ?", [val2.title, val2.salary, res2[0].id, val.updaterole])
+                            console.log(chalk.magenta("Database Updated.\n"));
                             viewRoles();
-                            promptAction();
+                            console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
                         })
                     })
             })
         })
 };
+
+function updateManager() {
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "managerchange",
+            message: "Which employee would you like to make changes to?",
+            choices: employees
+        }
+    ])
+        .then(val => {
+            const emplName = val.managerchange.split(" ");
+            connection.query("SELECT id, first_name, last_name, manager_id, manager FROM employee WHERE first_name = ? AND last_name = ?", [emplName[0], emplName[1]], function (err, res) {
+                if (err) throw err;
+                console.log(chalk.cyan("Current manager:"));
+                console.table(res);
+                inquirer.prompt([
+                    {
+                        type: "list",
+                        name: "newmanager",
+                        message: "Who is the new manager?",
+                        choices: employees
+                    }
+                ])
+                    .then(val2 => {
+                        connection.query("UPDATE employee SET manager = ? WHERE id = ?", [val2.newmanager, res[0].id], function (err, res2) {
+                            if (err) throw err;
+                        })
+                        connection.query("SELECT id, first_name, last_name, manager_id, manager FROM employee WHERE id = ?", [res[0].id], function (err, res3) {
+                            if (err) throw err;
+                            console.table(res3);
+                            console.log(chalk.magenta("Database Updated.\n"));
+                            console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+                        })
+                    })
+            })
+        })
+        
+}
 
 function viewBudget() {
     inquirer.prompt([
@@ -344,12 +405,12 @@ function viewBudget() {
     ])
         .then(val => {
             connection.query("SELECT SUM(salary) FROM employee WHERE department = ?", [val.budgetdepartment], function (err, res) {
-            if (err) throw err;
-            const budget = res[0]['SUM(salary)'];
-            console.log("Current total utilized budget of " + val.budgetdepartment + " = " + budget);
-            promptAction();
+                if (err) throw err;
+                const budget = res[0]['SUM(salary)'];
+                console.log(chalk.blue("Current total utilized budget of " + val.budgetdepartment + " = " + budget));
+                console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+            })
         })
-    })
 };
 
 function deleteDepartment() {
@@ -365,14 +426,9 @@ function deleteDepartment() {
             connection.query("DELETE FROM department WHERE name = ?", [val.deletedepartment], function (err, res) {
                 if (err) throw err;
             })
-        })
-        .then(val => {
-            connection.query("SELECT * FROM department", function (err, res) {
-                if (err) throw err;
-                console.table(res);
-                console.log("Database Updated.\n");
-                promptAction();
-            })
+            viewDepartments();
+            console.log(chalk.magenta("Database Updated.\n"));
+            console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
         })
 };
 
@@ -389,12 +445,9 @@ function deleteRole() {
             connection.query("DELETE FROM role WHERE title = ?", [val.deleterole], function (err, res) {
                 if (err) throw err;
             })
-            connection.query("SELECT * FROM role", function (err, res) {
-                if (err) throw err;
-                console.table(res);
-                console.log("Database updated.\n");
-                promptAction();
-            })
+            viewRoles();
+            console.log(chalk.magenta("Database Updated.\n"));
+            console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
         })
 };
 
@@ -411,13 +464,8 @@ function deleteEmployee() {
             connection.query("DELETE FROM employee WHERE last_name LIKE ?", [val.deleteemployee], function (err, res) {
                 if (err) throw err;
             })
-        })
-        .then(val => {
-            connection.query("SELECT * FROM employee", function (err, res) {
-                if (err) throw err;
-                console.table(res);
-                console.log("Database updated.\n");
-                promptAction();
-            })
+            viewAllEmployees();
+            console.log(chalk.magenta("Database Updated.\n"));
+            console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
         })
 };
