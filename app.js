@@ -461,7 +461,8 @@ function deleteEmployee() {
         }
     ])
         .then(val => {
-            connection.query("DELETE FROM employee WHERE last_name LIKE ?", [val.deleteemployee], function (err, res) {
+            const emplName = val.deleteemployee.split(" ");
+            connection.query("DELETE FROM employee WHERE first_name = ? AND last_name = ?", [emplName[0], emplName[1]], function (err, res) {
                 if (err) throw err;
             })
             viewAllEmployees();

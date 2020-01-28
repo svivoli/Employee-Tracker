@@ -34,12 +34,3 @@ CREATE TABLE employee (
     CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id),
     CONSTRAINT fk_manager FOREIGN KEY (manager_id) REFERENCES employee(id)
 );
-
-INSERT INTO department (name)
-VALUE("Accounting");
-
-INSERT INTO role (title, salary, department_id)
-VALUE("Sr. Accountant", 70000, 1);
-
-INSERT INTO employee (first_name, last_name, role_id, manager_id, salary, department)
-VALUE("Bill", "Waters", 1, NULL, 70000, "Accounting");
