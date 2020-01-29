@@ -22,6 +22,7 @@ mysql -u root -p seeds.sql
 ```
 - Enter your MySQL password when prompted.  
 The database should now be loaded in MySQL.   
+  
 Method 2:  
 - Copy the contents of the 'schema.sql' file and paste them into a new query in MySQL.
 - Run the query.
