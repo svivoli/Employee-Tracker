@@ -29,6 +29,15 @@ const title = `
    .xx    .xxxxxx  .xxxxxxx .xx  .xx .xx .xx  .xx     .xxxxxx
    .xx    .xx  .xx .xx  .xx  .xxxx   .xx  .xx .xxxxxx .xx   xx
 `
+
+const goodbye = `
+ .xxxxx   .xxxxx   .xxxxx  .xxxxx   .xxxxxx  .xx   .xx .xxxxxx
+.xx      .xx  .xx .xx  .xx .xx  .xx .xx  .xx  .xx .xx  .xx
+.xx .xxx .xx  .xx .xx  .xx .xx  .xx .xxxxxx    .xxxx   .xxxxxx
+.xx  .xx .xx  .xx .xx  .xx .xx  .xx .xx  .xx    .xx    .xx
+ .xxxxx   .xxxxx   .xxxxx  .xxxxx   .xxxxxx     .xx    .xxxxxx
+`
+
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
@@ -130,6 +139,29 @@ function promptAction() {
         })
 };
 
+function next() {
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "next",
+            message: "What would you like to do next?",
+            choices: [
+                "Return to menu",
+                "Exit"
+            ]
+        }
+    ])
+        .then(val => {
+            if (val.next === "Return to menu") {
+                promptAction();
+            } else if (val.next === "Exit") {
+                console.log(chalk.cyan(goodbye));
+                console.log(chalk.blue("Thank you for using Employee Tracker!"));
+                process.exit();
+            }
+        })
+};
+
 function addDepartment() {
     inquirer.prompt([
         {
@@ -147,7 +179,7 @@ function addDepartment() {
                     if (err) throw err;
                     viewDepartments();
                     console.log(chalk.magenta("Database Updated.\n"));
-                    console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+                    next();
                 })
             departments.push(JSON.stringify(val.name));
         })
@@ -186,7 +218,7 @@ function addRole() {
                         if (err) throw err;
                         viewRoles();
                         console.log(chalk.magenta("Database Updated.\n"));
-                        console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+                        next();
                     })
             })
         })
@@ -241,7 +273,7 @@ function addEmployee() {
                                 if (err) throw err;
                                 viewAllEmployees();
                                 console.log(chalk.magenta("Database Updated.\n"));
-                                console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+                                next();
                             })
                     })
                 })
@@ -254,7 +286,7 @@ function viewAllEmployees() {
     connection.query("SELECT * FROM employee", function (err, res) {
         if (err) throw err;
         console.table(res);
-        console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+        next();
     })
 }
 
@@ -262,7 +294,7 @@ function viewDepartments() {
     connection.query("SELECT * FROM department", function (err, res) {
         if (err) throw err;
         console.table(res);
-        console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+        next();
     })
 }
 
@@ -270,7 +302,7 @@ function viewRoles() {
     connection.query("SELECT * FROM role", function (err, res) {
         if (err) throw err;
         console.table(res);
-        console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+        next();
     })
 };
 
@@ -287,7 +319,7 @@ function viewEmplByDept() {
             connection.query("SELECT * FROM employee WHERE department = ?", [val.empldepartment], function (err, res) {
                 if (err) throw err;
                 console.table(res);
-                console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+                next();
             })
         })
 };
@@ -305,7 +337,7 @@ function viewEmplByMan() {
             connection.query("SELECT * FROM employee WHERE manager = ?", [val.emplmanager], function (err, res) {
                 if (err) throw err;
                 console.table(res);
-                console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+                next();
             })
         })
 }
@@ -349,7 +381,7 @@ function updateRole() {
                             connection.query("UPDATE role SET title = ?, salary = ?, department_id = ? WHERE title = ?", [val2.title, val2.salary, res2[0].id, val.updaterole])
                             console.log(chalk.magenta("Database Updated.\n"));
                             viewRoles();
-                            console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+                            next();
                         })
                     })
             })
@@ -387,12 +419,12 @@ function updateManager() {
                             if (err) throw err;
                             console.table(res3);
                             console.log(chalk.magenta("Database Updated.\n"));
-                            console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+                            next();
                         })
                     })
             })
         })
-        
+
 }
 
 function viewBudget() {
@@ -409,7 +441,7 @@ function viewBudget() {
                 if (err) throw err;
                 const budget = res[0]['SUM(salary)'];
                 console.log(chalk.blue("Current total utilized budget of " + val.budgetdepartment + " = " + budget));
-                console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+                next();
             })
         })
 };
@@ -427,14 +459,14 @@ function deleteDepartment() {
             connection.query("DELETE FROM department WHERE name = ?", [val.deletedepartment], function (err, res) {
                 if (err) throw err;
             })
-            for (i=0; i<departments.length; i++) {
+            for (i = 0; i < departments.length; i++) {
                 if (val.deletedepartment === departments[i]) {
                     departments.splice(i, 1)
                 }
             }
             viewDepartments();
             console.log(chalk.magenta("Database Updated.\n"));
-            console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+            next();
         })
 };
 
@@ -451,14 +483,14 @@ function deleteRole() {
             connection.query("DELETE FROM role WHERE title = ?", [val.deleterole], function (err, res) {
                 if (err) throw err;
             })
-            for (i=0; i<roles.length; i++) {
+            for (i = 0; i < roles.length; i++) {
                 if (val.deleterole === roles[i]) {
                     roles.splice(i, 1)
                 }
             }
             viewRoles();
             console.log(chalk.magenta("Database Updated.\n"));
-            console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+            next();
         })
 };
 
@@ -476,13 +508,13 @@ function deleteEmployee() {
             connection.query("DELETE FROM employee WHERE first_name = ? AND last_name = ?", [emplName[0], emplName[1]], function (err, res) {
                 if (err) throw err;
             })
-            for (i=0; i<employees.length; i++) {
+            for (i = 0; i < employees.length; i++) {
                 if (val.deleteemployee === employees[i]) {
                     employees.splice(i, 1)
                 }
             }
             viewAllEmployees();
             console.log(chalk.magenta("Database Updated.\n"));
-            console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
+            next();
         })
 };
