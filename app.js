@@ -89,6 +89,7 @@ function promptAction() {
                 "View employees by manager",
                 "Update a role",
                 "Update an employee's manager",
+                "Update an employee",
                 "View the total utilized budget of a department",
                 "Delete a department",
                 "Delete a role",
@@ -426,6 +427,11 @@ function deleteDepartment() {
             connection.query("DELETE FROM department WHERE name = ?", [val.deletedepartment], function (err, res) {
                 if (err) throw err;
             })
+            for (i=0; i<departments.length; i++) {
+                if (val.deletedepartment === departments[i]) {
+                    departments.splice(i, 1)
+                }
+            }
             viewDepartments();
             console.log(chalk.magenta("Database Updated.\n"));
             console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
@@ -445,6 +451,11 @@ function deleteRole() {
             connection.query("DELETE FROM role WHERE title = ?", [val.deleterole], function (err, res) {
                 if (err) throw err;
             })
+            for (i=0; i<roles.length; i++) {
+                if (val.deleterole === roles[i]) {
+                    roles.splice(i, 1)
+                }
+            }
             viewRoles();
             console.log(chalk.magenta("Database Updated.\n"));
             console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
@@ -465,6 +476,11 @@ function deleteEmployee() {
             connection.query("DELETE FROM employee WHERE first_name = ? AND last_name = ?", [emplName[0], emplName[1]], function (err, res) {
                 if (err) throw err;
             })
+            for (i=0; i<employees.length; i++) {
+                if (val.deleteemployee === employees[i]) {
+                    employees.splice(i, 1)
+                }
+            }
             viewAllEmployees();
             console.log(chalk.magenta("Database Updated.\n"));
             console.log(chalk.cyanBright("Press Control C and submit 'node app.js' to view the menu again"));
