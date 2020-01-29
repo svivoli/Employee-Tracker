@@ -27,5 +27,4 @@ VALUES
 ("Mary", "Alberts", 5, "Accts Payable", 55000, 3, "Finance", NULL, NULL),
 ("Pat", "McDuff", 6, "Accts Receivable", 55000, 3, "Finance", 5, "Mary Alberts"),
 ("Hank", "Olson", 7, "Senior Lawyer", 100000, 4, "Legal", NULL, NULL),
-("Reginald", "Obrien", 8, "Contracts Negotiator", 80000, 4 "Legal", 7, "Hank Olson");
-
+("Reginald", "Obrien", 8, "Contracts Negotiator", 80000, 4, "Legal", 7, "Hank Olson");
