@@ -16,7 +16,7 @@ CREATE TABLE role (
     salary DECIMAL(20, 2),
     department_id INT,
     PRIMARY KEY (id, title, salary), INDEX(id), INDEX(title), INDEX(salary),
-    CONSTRAINT fk_departmentid FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE SET NULL
+    CONSTRAINT fk_departmentid FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE employee (
@@ -31,9 +31,9 @@ CREATE TABLE employee (
     manager_id INT,
     manager VARCHAR(100),
     PRIMARY KEY (id),
-    CONSTRAINT fk_roleid FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE SET NULL,
-    CONSTRAINT fk_role FOREIGN KEY (role) REFERENCES role(title) ON DELETE SET NULL,
-    CONSTRAINT fk_salary FOREIGN KEY (salary) REFERENCES role(salary) ON DELETE SET NULL,
-    CONSTRAINT fk_departmentid2 FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE SET NULL,
-    CONSTRAINT fk_department FOREIGN KEY (department) REFERENCES department(name) ON DELETE SET NULL
+    CONSTRAINT fk_roleid FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_role FOREIGN KEY (role) REFERENCES role(title) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_salary FOREIGN KEY (salary) REFERENCES role(salary) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_departmentid2 FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_department FOREIGN KEY (department) REFERENCES department(name) ON DELETE SET NULL ON UPDATE CASCADE
 );

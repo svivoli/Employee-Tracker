@@ -17,11 +17,11 @@ var connection = mysql.createConnection({
 });
 
 const title = `
-.xxxxxx .xxx      .xxx .xxxxxx  .xx      .xxxxx  .xx    xx .xxxxxx .xxxxxx
-.xx     .xxxxx  .xxxxx .xx  .xx .xx     .xx  .xx  .xx  xx  .xx     .xx
-.xxxxxx .xx   .xx  .xx .xx  .xx .xx     .xx  .xx   .xxxx   .xxxxxx .xxxxxx
-.xx     .xx        .xx .xxxxxx  .xx     .xx  .xx    .xx    .xx     .xx
-.xxxxxx .xx        .xx .xx      .xxxxxx  .xxxxx     .xx    .xxxxxx .xxxxxx
+.xxxxxx .xxx     .xxx .xxxxxx  .xx      .xxxxx  .xx    xx .xxxxxx .xxxxxx
+.xx     .xxxxx .xxxxx .xx  .xx .xx     .xx  .xx  .xx  xx  .xx     .xx
+.xxxxxx .xx  .xx  .xx .xx  .xx .xx     .xx  .xx   .xxxx   .xxxxxx .xxxxxx
+.xx     .xx       .xx .xxxxxx  .xx     .xx  .xx    .xx    .xx     .xx
+.xxxxxx .xx       .xx .xx      .xxxxxx  .xxxxx     .xx    .xxxxxx .xxxxxx
 
 .xxxxxxxx .xxxxxx   .xxxxx   .xxxx   .xx  .xx .xxxxxx .xxxxxx
    .xx    .xx  .xx .xx  .xx .xx  .xx .xx .xx  .xx     .xx   xx
