@@ -7,35 +7,35 @@
 ## Instructions
 
 // Update password
-1 In the 'app.js' file change the password on line 15 to your MySQL password.  
+1) In the 'app.js' file change the password on line 15 to your MySQL password.  
 // Initialize database in MySQL  
 Method 1:  
-1 With Terminal pointing toward the project's directory, input the following command:  
+1) With Terminal pointing toward the project's directory, input the following command:  
 ```sh
 mysql -u root -p schema.sql
 ```
-2 Enter your MySQL password when prompted.  
-3 Input the following command:  
+2) Enter your MySQL password when prompted.  
+3) Input the following command:  
 ```sh
 mysql -u root -p seeds.sql
 ```
-4 Enter your MySQL password when prompted.    
+4) Enter your MySQL password when prompted.    
 The database should now be loaded in MySQL.   
 Method 2:  
-1 Copy the contents of the 'schema.sql' file and paste them into a new query in MySQL.  
-2 Run the query.  
-3 Copy the contents of the 'seeds.sql' file and paste them into MySQL.  
-4 Run the query.  
+1) Copy the contents of the 'schema.sql' file and paste them into a new query in MySQL.  
+2) Run the query.  
+3) Copy the contents of the 'seeds.sql' file and paste them into MySQL.  
+4) Run the query.  
 The database should now be loaded in MySQL.  
 // Run the application  
-1 With Terminal pointing toward the project's directory, input the following command:  
+1) With Terminal pointing toward the project's directory, input the following command:  
 ```sh
 node app.js
 ```
-2 A menu of options will appear after the question "What would you like to do?". Use the arrow keys to scroll through the options and press enter once you have selected one.  
-3 For menu options that prompt you for information, type or select your answer and press enter. Other options may simply display tables and information.  
-* A short menu appears after each operation through which you can select to return to the menu or exit.
-4 Share and Enjoy!  
+2) A menu of options will appear after the question "What would you like to do?". Use the arrow keys to scroll through the options and press enter once you have selected one.  
+3) For menu options that prompt you for information, type or select your answer and press enter. Other options may simply display tables and information.  
+* A short menu appears after each operation through which you can select to return to the menu or exit.  
+4) Share and Enjoy!  
 
 ## Description
 
