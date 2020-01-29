@@ -412,20 +412,23 @@ function updateManager() {
                     }
                 ])
                     .then(val2 => {
-                        connection.query("UPDATE employee SET manager = ? WHERE id = ?", [val2.newmanager, res[0].id], function (err, res2) {
+                        const managerName = val2.newmanager.split(" ");
+                        connection.query("SELECT * FROM employee WHERE first_name = ? AND last_name = ?", [managerName[0], managerName[1]], function (err, res4) {
                             if (err) throw err;
-                        })
-                        connection.query("SELECT id, first_name, last_name, manager_id, manager FROM employee WHERE id = ?", [res[0].id], function (err, res3) {
-                            if (err) throw err;
-                            console.table(res3);
-                            console.log(chalk.magenta("Database Updated.\n"));
-                            next();
+                            connection.query("UPDATE employee SET manager_id = ?, manager = ? WHERE id = ?", [res4[0].id, val2.newmanager, res[0].id], function (err, res2) {
+                                if (err) throw err;
+                                connection.query("SELECT id, first_name, last_name, manager_id, manager FROM employee WHERE id = ?", [res[0].id], function (err, res3) {
+                                    if (err) throw err;
+                                    console.table(res3);
+                                    console.log(chalk.magenta("Database Updated.\n"));
+                                    next();
+                                })
+                            })
                         })
                     })
             })
         })
-
-}
+};
 
 function viewBudget() {
     inquirer.prompt([
