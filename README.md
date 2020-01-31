@@ -27,7 +27,7 @@ Method 2:
 - Copy the contents of the 'schema.sql' file and paste them into a new query in MySQL.
 - Run the query.
 - Copy the contents of the 'seeds.sql' file and paste them into MySQL.
-- Run the query.
+- Run the query.  
 The database should now be loaded in MySQL.  
   
 // Run the application  

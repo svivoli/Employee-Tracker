@@ -98,7 +98,6 @@ function promptAction() {
                 "View employees by manager",
                 "Update a role",
                 "Update an employee's manager",
-                "Update an employee",
                 "View the total utilized budget of a department",
                 "Delete a department",
                 "Delete a role",
