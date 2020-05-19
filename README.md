@@ -94,7 +94,7 @@ The user may exit the application after performing each action, or from the main
 
 ## Bugs
 
-There is an apparent memory leak that causes disruptions in the application. Messages/menus will display multiple times and overlap one another. You can see some evidence of this in some of the images in the user experience section. Below is a more durastic example.
+There is an apparent memory leak that causes disruptions in the application. Messages/menus will display multiple times and overlap one another. You can see some evidence of this in some of the images in the user experience section. Below is a more drastic example.
 
 ![Memory Leak](memoryleak.png)
 
