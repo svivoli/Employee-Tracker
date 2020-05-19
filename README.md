@@ -62,8 +62,44 @@ A command-line application that allows users to track employee information. The 
 3. Prompts
 4. Console.table used to display tables
 
+## User Experience
+
+![Welcome](welcome.png)
+
+After running node app.js, the user is greeted with a large title and a main menu where they can select an action. The action types include updating, adding, viewing, and deleting. The user may also exit the menu/application.
+
+![Add Employee](addemployee.png)
+
+When adding an employee the user is prompted for the employees name, role, and manager.
+
+![Add Employee](addemployee1.png) 
+
+Once the user inputs the data, the user receives a message confirming the database has been updated and the corresponding table is displayed to reflect the changes made. The user receives the same output when performing deletions.
+
+![View Roles](viewroles.png)
+
+When viewing all roles a table of all roles and their corresponding salaries and ids is displayed.
+
+![View Employees](viewemployees.png) 
+
+When viewing all employees a table of all roles and their corresponding roles, salaries, departments, managers, and ids is displayed.
+
+![Update Role](updaterole.png)
+
+When updating an entry, the user is asked which entry they want to update, after which a table displaying the current state of that entry is rendered. Next, the user is asked questions pertaining to the details of the role. If any of the data points should remain the same, the user should simply enter the same values. Once they have answered all questions, a table is displayed to reflect the changes made to the entry. 
+
+![Exit](exit.png)
+
+The user may exit the application after performing each action, or from the main menu. Upon doing so, a goodbye title and a thank you message are displayed.
+
+## Bugs
+
+There is an apparent memory leak that causes disruptions in the application. Messages/menus will display multiple times and overlap one another. You can see some evidence of this in some of the images in the user experience section. Below is a more durastic example.
+
+![Memory Leak](memoryleak.png)
+
 ## Developer Experience
 
-I found this project to be involved but it came easily after my exposure to MySQL in class. The code is a bit lengthy and some functions have nested queries that seem cumbersome and less than concise. I would like to try rebuilding the application using promises to see if the code would be a little cleaner. I found that the console does not always display things properly, despite a working code (the menu displays twice, or things overlap), which was a bit of an annoyance. Another project that showcases the functionality of command-line applications and node.
+I found this project to be involved but it came easily after my exposure to MySQL in class. The code is a bit lengthy and some functions have nested queries that seem cumbersome and less than concise. I would like to try rebuilding the application using promises to see if the code would be a little cleaner. The memory leak issue is devastating to the functionality of the app, and I will be working to get it resolved in the future. Issues aside, a fun project that showcases the functionality of command-line applications and node.
 
 --Sarah Vivoli

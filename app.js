@@ -101,7 +101,8 @@ function promptAction() {
                 "View the total utilized budget of a department",
                 "Delete a department",
                 "Delete a role",
-                "Delete an employee"
+                "Delete an employee",
+                "Exit"
             ]
         }
     ])
@@ -134,6 +135,10 @@ function promptAction() {
                 deleteRole();
             } else if (val.type === "Delete an employee") {
                 deleteEmployee();
+            } else if (val.type === "Exit") {
+                console.log(chalk.cyan(goodbye));
+                console.log(chalk.blue("Thank you for using Employee Tracker!"));
+                process.exit();
             }
         })
 };
